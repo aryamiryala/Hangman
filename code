@@ -1,0 +1,192 @@
+ //task 1, asking for userinput
+            Console.WriteLine("Please type in a word of your choice to play hangman!");
+            string w = Console.ReadLine().ToLower(); //converts userinput to lowercase so there is no errors
+            Console.Clear();
+            //task2
+        
+            string[] b = new string[w.Length];
+            for (int a = 0; a < w.Length; a++)
+            {
+                b[a] = w.Substring(a, 1);
+            }
+            int p = w.Length + 6; //creating new variable that adds length of userinput to 6, because only 6 tries.
+            
+            string[] guess = new string[w.Length];
+            guess = dashedlines(guess);
+            string[] incorrect = new string[6];
+            bool o = false;
+            bool e = false;
+            string[] h = HangDudes();
+            int u = 0; //incorrect guesses
+            while (p > 0)
+            {
+                
+                string g = f();//new function that sees if userinput is only one letter
+                if (g == "no")
+                {
+                    Console.WriteLine("This is not an acceptable value. Please try again with only one letter.");
+                }
+                else
+                {
+                    p--;
+                    for (int a = 0; a < b.Length; a++)
+                    {
+                        if (b[a] == g)
+                        {
+                            guess[a] = g + " ";
+                            o = true;
+                        }
+                    }
+                    if (o == true)
+                    {
+                        Console.WriteLine(m(guess));
+                        Console.WriteLine(h[u]);   // this prints the hangman
+                        if (r(guess) == w) // this checks to see if the word was guessed
+                        {
+                            Console.WriteLine("Correct! Good Job");
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        e = s(incorrect, g);   //checks if the same letter was guessed
+                        if (e == true)
+                        {
+                            Console.WriteLine("You have already guessed this letter. Guess a different letter.");
+                        }
+                        else
+                        {
+                            u++;  // this adds to # of incorrect guesses
+                            incorrect = Add(incorrect, g, u);  //adds the incorrect guess to array
+                            Console.WriteLine(m(incorrect));    //prints the incorrect guess(es)
+                            Console.WriteLine(h[u]);   //This prints hangman again this time with incorrect guesses
+                            if (u == 6)
+                            {   //There are always 6 incorrect guesses
+                                p = 0;
+                                Console.WriteLine("Sorry,you lost.");
+                            }
+                        }
+                    }
+                }
+                o = false;
+            }
+            Console.ReadLine();
+        }
+
+        static string[] dashedlines(string[] j) //this function adds a blank for the letter in the array
+        {
+            for (int y = 0; y < j.Length; y++)
+            {
+                j[y] = "_ ";
+            }
+            return j;
+        }
+        static string m(string[] a) //this function makes string that stores in array
+        {
+            string b = "";
+            for (int i = 0; i < a.Length; i++)
+            {
+                b = b + a[i];
+            }
+            return b;
+        }
+        static string f() //this function takes and checks if user input is a letter.
+        {
+            Console.WriteLine("\n Please guess only one letter.");
+            string g = Console.ReadLine();
+            if ((g.Length != 1))
+                return "no";
+            else
+            {
+                Char a = g[0];
+                if (Char.IsLetter(a))
+                    return a.ToString();
+                else
+                    return "no";
+            }
+        }
+
+
+
+        static string[] Add(string[] i, string o, int p) // this function stores incorrect guesses user inputs to array
+        {
+            i[p - 1] = o;
+            return i;
+        }
+        static bool s(string[] a, string guess) //this function will check to see if the letter has already been guessed
+        {
+            bool c = false;
+            for (int i = 0; i < a.Length; i++)
+            {
+                if (a[i] == guess)
+                {
+                    c = true;
+                    break;
+                }
+            }
+            return c;
+        }
+        static string r(string[] x)//this function converts the array to string because it needs to compare it with w.
+        {
+            string z = "";
+            for (int i = 0; i < x.Length; i++)
+            {
+                z = z + x[i];
+            }
+            return z.Replace(" ", "");
+        }
+        static string[] HangDudes() // the array that is storing the hangman
+        {
+            string[] dudes = { @"  
+  +---+
+  |   |
+      |
+      |
+      |
+      |
+=========", @"
+  +---+
+  |   |
+  O   |
+      |
+      |
+      |
+=========", @"
+  +---+
+  |   |
+  O   |
+  |   |
+      |
+      |
+=========", @"
+  +---+
+  |   |
+  O   |
+ /|   |
+      |
+      |
+=========", @"
+  +---+
+  |   |
+  O   |
+ /|\  |
+      |
+      |
+=========", @"
+  +---+
+  |   |
+  O   |
+ /|\  |
+ /    |
+      |
+=========", @"
+  +---+
+  |   |
+  O   |
+ /|\  |
+ / \  |
+      |
+=========" };
+            return dudes;
+
+        }
